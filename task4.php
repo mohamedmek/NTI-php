@@ -1,5 +1,5 @@
 <?php
-//mek
+
 $name = $email = $linkedin = $pass = $address = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -60,6 +60,24 @@ function test_input($data) {
   $data = htmlspecialchars($data);
   return $data;
 }
+
+
+
+$target_dir = "uploads/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+// Check if image file is a actual image or fake image
+if(isset($_POST["submit"])) {
+  $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+  if($check !== false) {
+    echo "File is an image - " . $check["mime"] . ".";
+    $uploadOk = 1;
+  } else {
+    echo "File is not an image.";
+    $uploadOk = 0;
+  }
+}
 ?>
 
 
@@ -67,12 +85,13 @@ function test_input($data) {
 <html>
 <body>
 
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" >
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
 Name: <input type="text" name="name"><br>
 E-mail: <input type="text" name="email"><br>
 LinkedIn URL: <input type="url" name="linkedin"><br>
 password: <input type="password" name="pass"><br>
 Address: <input type="text" name="address"><br>
+<input type="file" name="fileToUpload" id="fileToUpload">
 
 
 <span class="error">* <?php echo $nameErr?></span>
